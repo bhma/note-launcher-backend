@@ -13,6 +13,9 @@ const corsConfig = {
 app.use(cors(corsConfig));
 app.use(express.json());
 app.use('/api', routes);
+app.get('/', (req, res)=> {
+    console.log('Hello World!');
+});
 
 app.listen(PORT, () => {
     console.log('Server listing on ' + PORT);
