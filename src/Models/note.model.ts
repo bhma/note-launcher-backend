@@ -1,9 +1,9 @@
 export interface INote{
-    id: number;
-    occurrenceDate: Date;
-    occurrenceMonth: string;
-    value: number;
-    schoolId: number;
-    description: string;
-    isActive?: boolean;
+    NOTE_ID: number;
+    OCCURRENCE_DATE: Date;
+    OCCURRENCE_MONTH: Date;
+    VALUE: number;
+    SCHOOL_ID: number;
+    DESCRIPTION: string;
+    IS_ACTIVE?: boolean;
 }

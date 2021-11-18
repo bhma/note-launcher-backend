@@ -40,19 +40,19 @@ class NoteController {
 
     async createNote(req: Request, res: Response) {
         const {
-            occurrenceDate,
-            occurrenceMonth,
-            value,
-            schoolId,
-            description
+            OCCURRENCE_DATE,
+            OCCURRENCE_MONTH,
+            VALUE,
+            SCHOOL_ID,
+            DESCRIPTION,
         } = req.body;
         const newNote: INote = {
-            id: 0,
-            occurrenceDate,
-            occurrenceMonth,
-            value,
-            schoolId,
-            description
+            NOTE_ID: 0,
+            OCCURRENCE_DATE,
+            OCCURRENCE_MONTH,
+            VALUE,
+            SCHOOL_ID,
+            DESCRIPTION
         };
         try {
             const noteService = new NoteService();
@@ -72,20 +72,22 @@ class NoteController {
 
     async updateNote(req: Request, res: Response) {
         const {
-            noteId,
-            occurrenceDate,
-            occurrenceMonth,
-            value,
-            schoolId,
-            description
+            NOTE_ID,
+            OCCURRENCE_DATE,
+            OCCURRENCE_MONTH,
+            VALUE,
+            SCHOOL_ID,
+            DESCRIPTION,
+            IS_ACTIVE
         } = req.body;
         const updNote: INote = {
-            id: noteId,
-            occurrenceDate,
-            occurrenceMonth,
-            value,
-            schoolId,
-            description
+            NOTE_ID,
+            OCCURRENCE_DATE,
+            OCCURRENCE_MONTH,
+            VALUE,
+            SCHOOL_ID,
+            DESCRIPTION,
+            IS_ACTIVE
         };
         try {
             const noteService = new NoteService();
@@ -94,7 +96,7 @@ class NoteController {
             console.warn('Erro no note controller: createNote');
             console.error(error);
         }
-        function handleUpdNote(err: Error){
+        function handleUpdNote(err: Error) {
             if (err) {
                 res.json(err);
             } else {

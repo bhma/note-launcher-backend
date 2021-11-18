@@ -18,7 +18,7 @@ class SchoolService {
         try {
             db.run(`INSERT INTO SCHOOL (SCHOOL_NAME, DIRECTOR_NAME, ADDRESS, IS_ACTIVE) 
                     VALUES (?, ?, ?, 1)`,
-                    [newSchool.schoolName, newSchool.directorName, newSchool.address],
+                    [newSchool.SCHOOL_NAME, newSchool.DIRECTOR_NAME, newSchool.ADDRESS],
                     (err) => {
                         callback(err?.message);
                     });
@@ -34,9 +34,9 @@ class SchoolService {
                     SET SCHOOL_NAME = ?, 
                         DIRECTOR_NAME = ?,
                         ADDRESS = ?,
-                        IS_ACTIVE = 1
+                        IS_ACTIVE = ?
                     WHERE SCHOOL_ID = ?`,
-                    [updSchool.schoolName, updSchool.directorName, updSchool.address, updSchool.id],
+                    [updSchool.SCHOOL_NAME, updSchool.DIRECTOR_NAME, updSchool.ADDRESS, updSchool.IS_ACTIVE, updSchool.SCHOOL_ID],
                     (err) => {
                         callback(err?.message)
                     });

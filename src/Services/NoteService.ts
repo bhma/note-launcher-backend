@@ -32,7 +32,7 @@ class NoteService {
         try {
             db.run(`INSERT INTO NOTE (OCCURRENCE_DATE, OCCURRENCE_MONTH, VALUE, SCHOOL_ID, DESCRIPTION, IS_ACTIVE)
                     VALUES (?,?,?,?,?,1)`,
-                    [newNote.occurrenceDate, newNote.occurrenceMonth,  newNote.value, newNote.schoolId, newNote.description],
+                    [newNote.OCCURRENCE_DATE, newNote.OCCURRENCE_MONTH,  newNote.VALUE, newNote.SCHOOL_ID, newNote.DESCRIPTION],
                     (err) => {
                         callback(err?.message);
                     });
@@ -50,9 +50,9 @@ class NoteService {
                         VALUE = ?,
                         SCHOOL_ID = ?,
                         DESCRIPTION = ?,
-                        IS_ACTIVE = 1
+                        IS_ACTIVE = ?
                     WHERE NOTE_ID = ?`,
-                    [updNote.occurrenceDate, updNote.occurrenceMonth, updNote.value, updNote.schoolId, updNote.description, updNote.id],
+                    [updNote.OCCURRENCE_DATE, updNote.OCCURRENCE_MONTH,  updNote.VALUE, updNote.SCHOOL_ID, updNote.DESCRIPTION, updNote.IS_ACTIVE, updNote.NOTE_ID],
                     (err) => {
                         callback(err?.message);
                     });

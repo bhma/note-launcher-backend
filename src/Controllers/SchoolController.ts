@@ -23,15 +23,15 @@ class SchoolController {
 
     async createSchool(req: Request, res: Response) {
         const {
-            schoolName,
-            directorName,
-            address
+            SCHOOL_NAME,
+            DIRECTOR_NAME,
+            ADDRESS
         } = req.body;
         const newSchool: ISchool = {
-            id: 0,
-            schoolName,
-            directorName,
-            address
+            SCHOOL_ID: 0,
+            SCHOOL_NAME,
+            DIRECTOR_NAME,
+            ADDRESS
         }
         try {
             const schoolService = new SchoolService();
@@ -49,18 +49,20 @@ class SchoolController {
         }
     }
 
-    async updateSchool(req: Request, res: Response){
+    async updateSchool(req: Request, res: Response) {
         const {
-            schoolId,
-            schoolName,
-            directorName,
-            address
+            SCHOOL_ID,
+            SCHOOL_NAME,
+            DIRECTOR_NAME,
+            ADDRESS,
+            IS_ACTIVE
         } = req.body;
         const newSchool: ISchool = {
-            id: schoolId,
-            schoolName,
-            directorName,
-            address
+            SCHOOL_ID,
+            SCHOOL_NAME,
+            DIRECTOR_NAME,
+            ADDRESS,
+            IS_ACTIVE
         }
         try {
             const schoolService = new SchoolService();
@@ -78,7 +80,7 @@ class SchoolController {
         }
     }
 
-    async getSchoolById(req: Request, res: Response){
+    async getSchoolById(req: Request, res: Response) {
         const schoolId = req.params['schoolId'];
         try {
             const schoolService = new SchoolService();
