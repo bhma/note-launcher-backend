@@ -38,6 +38,27 @@ class NoteController {
         }
     }
 
+    async getNotebyMonth(req: Request, res: Response) {
+        const month = req.params['month'];
+        try {
+            const noteService = new NoteService();
+            noteService.getNoteByMonth(month, handleGetNoteByMonth);
+        } catch (error) {
+            console.warn('Erro no note controller: getNoteByMonth');
+            console.error(error);
+        }
+        function handleGetNoteByMonth(err: Error, notes: INote[], sumValues: number) {
+            if (err) {
+                res.json(err);
+            } else {
+                res.json({
+                    sumValues,
+                    notes
+                });
+            }
+        }
+    }
+
     async createNote(req: Request, res: Response) {
         const {
             OCCURRENCE_DATE,

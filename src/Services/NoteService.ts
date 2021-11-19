@@ -20,10 +20,30 @@ class NoteService {
                     WHERE NOTE_ID = ?`,
                 [noteId],
                 (err, row: INote) => {
-                    callback(err, row)
+                    callback(err, row);
                 });
         } catch (error) {
             console.warn('Erro no noteService: getNoteById');
+            console.error(error);
+        }
+    }
+
+    async getNoteByMonth(month: string, callback: Function){
+        try {
+            db.all(`SELECT * FROM NOTE
+                    WHERE OCCURRENCE_MONTH LIKE ?`,
+                [month],
+                (err, notes: INote[]) => {
+                    // callback(err, rows);
+                    db.get(`SELECT SUM(VALUE) AS SumValues
+                            FROM NOTE
+                            WHERE OCCURRENCE_MONTH LIKE ?`,[month],
+                            (err, sumValues) => {
+                                callback(err, notes, sumValues);
+                            });
+                });
+        } catch (error) {
+            console.warn('Erro no noteService: getNoteByMonth');
             console.error(error);
         }
     }

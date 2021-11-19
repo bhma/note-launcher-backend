@@ -16,13 +16,14 @@ const monthController = new MonthController();
 routes.get('/schools', schoolController.getSchools);
 routes.get('/school/:schoolId', schoolController.getSchoolById);
 routes.post('/createSchool', schoolController.createSchool);
-routes.post('/updateSchool', schoolController.updateSchool);
+routes.put('/updateSchool', schoolController.updateSchool);
 
 //--> Rotas para note
 routes.get('/notes', noteController.getNotes);
+routes.get('/notes/:month', noteController.getNotebyMonth);
 routes.get('/note/:noteId', noteController.getNotebyId);
 routes.post('/createNote', noteController.createNote);
-routes.post('/updateNote', noteController.updateNote);
+routes.put('/updateNote', noteController.updateNote);
 
 // --> Rota de month
 routes.get('/months', monthController.getMonths);
