@@ -23,6 +23,7 @@ routes.get('/notes', noteController.getNotes);
 routes.get('/notes/:month', noteController.getNotebyMonth);
 routes.get('/note/:noteId', noteController.getNotebyId);
 routes.post('/createNote', noteController.createNote);
+routes.post('/createManyNotes', noteController.createManyNotes);
 routes.put('/updateNote', noteController.updateNote);
 
 // --> Rota de month

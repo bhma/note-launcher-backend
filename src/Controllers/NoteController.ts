@@ -91,6 +91,31 @@ class NoteController {
         }
     }
 
+    async createManyNotes(req: Request, res: Response) {
+        // const {
+        //     OCCURRENCE_DATE,
+        //     OCCURRENCE_MONTH,
+        //     VALUE,
+        //     SCHOOL_ID,
+        //     DESCRIPTION,
+        // } = req.body;
+        const newNote: INote[] = req.body;
+        try {
+            const noteService = new NoteService();
+            noteService.createManyNotes(newNote, handleCreateManyNotes);
+        } catch (error) {
+            console.warn('Erro no note controller: createManyNotes');
+            console.error(error);
+        }
+        function handleCreateManyNotes(err: Error) {
+            if (err) {
+                return res.json(err);
+            } else {
+                return res.json('Notes created!');
+            }
+        }
+    }
+
     async updateNote(req: Request, res: Response) {
         const {
             NOTE_ID,
