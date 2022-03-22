@@ -20,7 +20,7 @@ routes.put('/updateSchool', schoolController.updateSchool);
 
 //--> Rotas para note
 routes.get('/notes', noteController.getNotes);
-routes.get('/notes/:month', noteController.getNotebyMonth);
+routes.get('/notes/:month/:schoolId?', noteController.getNotebyMonth);
 routes.get('/note/:noteId', noteController.getNotebyId);
 routes.post('/createNote', noteController.createNote);
 routes.post('/createManyNotes', noteController.createManyNotes);

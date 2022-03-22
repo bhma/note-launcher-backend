@@ -40,9 +40,10 @@ class NoteController {
 
     async getNotebyMonth(req: Request, res: Response) {
         const month = req.params['month'];
+        const schoolId = req.params['schoolId'];
         try {
             const noteService = new NoteService();
-            noteService.getNoteByMonth(month, handleGetNoteByMonth);
+            noteService.getNoteByMonth(month, handleGetNoteByMonth, Number(schoolId));
         } catch (error) {
             console.warn('Erro no note controller: getNoteByMonth');
             console.error(error);

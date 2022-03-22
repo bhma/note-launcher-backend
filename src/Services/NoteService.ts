@@ -28,20 +28,33 @@ class NoteService {
         }
     }
 
-    async getNoteByMonth(month: string, callback: Function) {
+    async getNoteByMonth(month: string, callback: Function, schoolId?: number) {
         try {
-            db.all(`SELECT * FROM NOTE
-                    WHERE OCCURRENCE_MONTH LIKE ?`,
-                [month],
-                (err, notes: INote[]) => {
-                    // callback(err, rows);
-                    db.get(`SELECT SUM(VALUE) AS SumValues
-                            FROM NOTE
-                            WHERE OCCURRENCE_MONTH LIKE ?`, [month],
-                        (err, sumValues) => {
-                            callback(err, notes, sumValues);
-                        });
-                });
+            if(schoolId){
+                db.all(`SELECT * FROM NOTE
+                        WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?`,
+                    [month, schoolId],
+                    (err, notes: INote[]) => {
+                        db.get(`SELECT SUM(VALUE) AS SumValues
+                                FROM NOTE
+                                WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?`, [month, schoolId],
+                            (err, sumValues) => {
+                                callback(err, notes, sumValues);
+                            });
+                    });
+            }else{
+                db.all(`SELECT * FROM NOTE
+                        WHERE OCCURRENCE_MONTH LIKE ?`,
+                    [month],
+                    (err, notes: INote[]) => {
+                        db.get(`SELECT SUM(VALUE) AS SumValues
+                                FROM NOTE
+                                WHERE OCCURRENCE_MONTH LIKE ?`, [month],
+                            (sumValues) => {
+                                callback(err, notes, sumValues);
+                            });
+                    });
+            }
         } catch (error) {
             console.warn('Erro no noteService: getNoteByMonth');
             console.error(error);
