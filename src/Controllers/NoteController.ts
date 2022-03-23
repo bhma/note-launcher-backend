@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { INote } from '../Models/note.model';
 import { NoteService } from '../Services/NoteService';
+import mime from 'mime';
+import path from 'path';
 
 class NoteController {
     async getNotes(req: Request, res: Response) {
@@ -93,13 +95,6 @@ class NoteController {
     }
 
     async createManyNotes(req: Request, res: Response) {
-        // const {
-        //     OCCURRENCE_DATE,
-        //     OCCURRENCE_MONTH,
-        //     VALUE,
-        //     SCHOOL_ID,
-        //     DESCRIPTION,
-        // } = req.body;
         const newNote: INote[] = req.body;
         try {
             const noteService = new NoteService();
@@ -149,6 +144,20 @@ class NoteController {
             } else {
                 res.json('Note updated!');
             }
+        }
+    }
+
+    async exportExcel(req: Request, res: Response){
+        try {
+            const noteService = new NoteService();
+            const filePath = `./${await noteService.createExcel()}`;
+            const fileName = path.basename(filePath);
+            res.setHeader('Content-Disposition', 'attachment;filename=' + fileName);
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.download(filePath);
+        } catch (error) {
+            console.warn('Erro no note controller: exportExcel');
+            console.error(error);
         }
     }
 }

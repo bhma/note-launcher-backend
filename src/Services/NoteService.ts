@@ -1,5 +1,7 @@
 import { db } from "../Database";
 import { INote } from "../Models/note.model";
+import fs from 'fs';
+import excel, { Workbook } from 'exceljs';
 
 class NoteService {
     async getNotes(callback: Function) {
@@ -50,7 +52,7 @@ class NoteService {
                         db.get(`SELECT SUM(VALUE) AS SumValues
                                 FROM NOTE
                                 WHERE OCCURRENCE_MONTH LIKE ?`, [month],
-                            (sumValues) => {
+                            (err, sumValues) => {
                                 callback(err, notes, sumValues);
                             });
                     });
@@ -116,6 +118,36 @@ class NoteService {
             console.warn('Erro no noteService: updateNote');
             console.error(error);
         }
+    }
+
+    async createExcel(){
+        const wb = new excel.Workbook();
+        wb.creator = 'Bruno Andrade';
+        wb.created = new Date;
+
+        const ws = wb.addWorksheet('Sheet 1');
+
+        ws.columns = [
+            { header: 'Id', key: 'id'},
+            { header: 'Name', key: 'name'},
+            { header: 'Date', key: 'date'}
+        ];
+        
+        
+        return this.writeFile(wb);
+    }
+
+    async writeFile(wb: Workbook){
+        const path = `./`;
+        const listFiles = fs.readdirSync(path);
+        let fileExcel = listFiles.filter(fileName => {
+            return fileName.endsWith('.xlsx');
+        })
+        if(fileExcel.length > 0){
+            fs.rmSync(`${path}${fileExcel.pop()}`);
+        }
+        await wb.xlsx.writeFile(`ListaNotas.xlsx`);
+        return `ListaNotas.xlsx`;
     }
 }
 

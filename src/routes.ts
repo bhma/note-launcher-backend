@@ -25,6 +25,7 @@ routes.get('/note/:noteId', noteController.getNotebyId);
 routes.post('/createNote', noteController.createNote);
 routes.post('/createManyNotes', noteController.createManyNotes);
 routes.put('/updateNote', noteController.updateNote);
+routes.get('/exportExcel', noteController.exportExcel);
 
 // --> Rota de month
 routes.get('/months', monthController.getMonths);
