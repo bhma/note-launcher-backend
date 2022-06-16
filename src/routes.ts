@@ -35,7 +35,10 @@ routes.get('/months', monthController.getMonths);
 // -->
 
 // --> Rotas para balance
+routes.get('/getBalance/:id', balanceController.getById);
+routes.get('/getAllBalances', balanceController.getAll);
 routes.post('/createBalance', balanceController.create);
+routes.put('/updateBalance', balanceController.update);
 // -->
 
 export { routes };

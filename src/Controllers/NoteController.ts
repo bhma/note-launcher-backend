@@ -135,7 +135,7 @@ class NoteController {
             const noteService = new NoteService();
             noteService.updateNote(updNote, handleUpdNote);
         } catch (error) {
-            console.warn('Erro no note controller: createNote');
+            console.warn('Erro no note controller: updateNote');
             console.error(error);
         }
         function handleUpdNote(err: Error) {
