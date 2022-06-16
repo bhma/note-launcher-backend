@@ -5,11 +5,6 @@ import cors from "cors";
 const PORT = process.env.PORT || 10110;
 const app = express();
 
-// const corsConfig = {
-//     origin: '*',
-//     optionsSuccessStatus: 200
-// };
-
 app.use(cors());
 app.use(express.json());
 app.use('/api', routes);

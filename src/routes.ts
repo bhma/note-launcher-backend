@@ -2,6 +2,7 @@ import { Router } from "express";
 import { MonthController } from "./Controllers/MonthController";
 import { NoteController } from "./Controllers/NoteController";
 import { SchoolController } from "./Controllers/SchoolController";
+import { BalanceController } from './Controllers/BalanceController';
 
 const routes = Router();
 
@@ -9,6 +10,7 @@ const routes = Router();
 const schoolController = new SchoolController();
 const noteController = new NoteController();
 const monthController = new MonthController();
+const balanceController = new BalanceController
 // -->
 
 // --> Definição das rotas
@@ -30,6 +32,10 @@ routes.get('/exportExcel', noteController.exportExcel);
 // --> Rota de month
 routes.get('/months', monthController.getMonths);
 
+// -->
+
+// --> Rotas para balance
+routes.post('/createBalance', balanceController.create);
 // -->
 
 export { routes };

@@ -5,7 +5,7 @@ class SchoolService {
     async getSchools(callback: Function) {
         try {
             db.all('SELECT * FROM SCHOOL;', 
-            (err, rows: ISchool[]) => {
+            (err: Error, rows: ISchool[]) => {
                 callback(err, rows);
             });
         } catch (error) {
@@ -52,7 +52,7 @@ class SchoolService {
                     FROM SCHOOL
                     WHERE SCHOOL_ID = ?`,
                 [schoolId],
-                (err, row: ISchool) => {
+                (err: Error, row: ISchool) => {
                    callback(err, row); 
                 })
         } catch (error) {

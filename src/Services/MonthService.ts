@@ -5,7 +5,7 @@ class MonthService {
         try {
             db.all(`SELECT OCCURRENCE_MONTH
                     FROM NOTE
-                    GROUP BY OCCURRENCE_MONTH`, (err, rows: string[]) => {
+                    GROUP BY OCCURRENCE_MONTH`, (err: Error, rows: string[]) => {
                         callback(err, rows);
                     });
         } catch (error) {

@@ -7,7 +7,7 @@ class NoteService {
     async getNotes(callback: Function) {
         try {
             db.all(`SELECT * FROM NOTE;`,
-                (err, rows: INote[]) => {
+                (err: Error, rows: INote[]) => {
                     callback(err, rows);
                 });
         } catch (error) {
@@ -21,7 +21,7 @@ class NoteService {
             db.get(`SELECT * FROM NOTE
                     WHERE NOTE_ID = ?`,
                 [noteId],
-                (err, row: INote) => {
+                (err: Error, row: INote) => {
                     callback(err, row);
                 });
         } catch (error) {
@@ -36,7 +36,7 @@ class NoteService {
                 db.all(`SELECT * FROM NOTE
                         WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?`,
                     [month, schoolId],
-                    (err, notes: INote[]) => {
+                    (err: Error, notes: INote[]) => {
                         db.get(`SELECT SUM(VALUE) AS SumValues
                                 FROM NOTE
                                 WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?`, [month, schoolId],
@@ -48,7 +48,7 @@ class NoteService {
                 db.all(`SELECT * FROM NOTE
                         WHERE OCCURRENCE_MONTH LIKE ?`,
                     [month],
-                    (err, notes: INote[]) => {
+                    (err: Error, notes: INote[]) => {
                         db.get(`SELECT SUM(VALUE) AS SumValues
                                 FROM NOTE
                                 WHERE OCCURRENCE_MONTH LIKE ?`, [month],
