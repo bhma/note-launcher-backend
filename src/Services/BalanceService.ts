@@ -30,9 +30,9 @@ export class BalanceService {
 
     async create(newBalance: IBalance, callback: Function){
         try {
-            db.run(`INSERT INTO BALANCE (CREATED_ON, OCCURRENCE_MONTH, VALUE, IS_ACTIVE)
-            VALUES (?,?,?,1);`, 
-            [newBalance.CREATED_ON, newBalance.OCCURRENCE_MONTH, newBalance.VALUE],
+            db.run(`INSERT INTO BALANCE (CREATED_ON, OCCURRENCE_MONTH, SCHOOL_ID, VALUE, IS_ACTIVE)
+            VALUES (?,?,?,?,1);`, 
+            [newBalance.CREATED_ON, newBalance.OCCURRENCE_MONTH, newBalance.SCHOOL_ID, newBalance.VALUE],
             (err) => callback(err?.message));
         } catch (error) {
             console.log('Erro no balanceService: Create balance');
@@ -45,10 +45,11 @@ export class BalanceService {
             db.run(`UPDATE BALANCE
                     SET CREATED_ON = ?, 
                         OCCURRENCE_MONTH = ?,
+                        SCHOOL_ID = ?,
                         VALUE = ?,
                         IS_ACTIVE = ?
                     WHERE BALANCE_ID = ?`,
-                [updBalance.CREATED_ON, updBalance.OCCURRENCE_MONTH, updBalance.VALUE, updBalance.IS_ACTIVE, updBalance.BALANCE_ID],
+                [updBalance.CREATED_ON, updBalance.OCCURRENCE_MONTH, updBalance.SCHOOL_ID, updBalance.VALUE, updBalance.IS_ACTIVE, updBalance.BALANCE_ID],
                 (err) => {
                     callback(err?.message);
                 });

@@ -42,12 +42,14 @@ export class BalanceController {
         const {
             CREATED_ON,
             OCCURRENCE_MONTH,
+            SCHOOL_ID,
             VALUE
         } = req.body;
         const newBalance: IBalance = {
             BALANCE_ID: 0,
             CREATED_ON,
             OCCURRENCE_MONTH,
+            SCHOOL_ID,
             VALUE
         };
 
@@ -72,6 +74,7 @@ export class BalanceController {
             BALANCE_ID,
             CREATED_ON,
             OCCURRENCE_MONTH,
+            SCHOOL_ID,
             VALUE,
             IS_ACTIVE
         } = req.body;
@@ -79,6 +82,7 @@ export class BalanceController {
             BALANCE_ID,
             CREATED_ON,
             OCCURRENCE_MONTH,
+            SCHOOL_ID,
             VALUE,
             IS_ACTIVE
         };

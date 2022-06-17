@@ -32,6 +32,7 @@ const db = new sqlite3.Database('./database.db', (err) => {
             BALANCE_ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             CREATED_ON DATE NOT NULL,
             OCCURRENCE_MONTH TEXT NOT NULL,
+            SCHOOL_ID INTEGER REFERENCES SCHOOL (SCHOOL_ID) NOT NULL,
             VALUE REAL NOT NULL,
             IS_ACTIVE BOOLEAN NOT NULL DEFAULT(true)
             );`);
