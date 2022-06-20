@@ -4,7 +4,8 @@ import { IBalance } from './../Models/balance.model';
 export class BalanceService {
     async getAll(callback: Function){
         try {
-            db.all(`SELECT * FROM BALANCE;`,
+            db.all(`SELECT * FROM BALANCE
+                    WHERE IS_ACTIVE = 1;`,
                 (err: Error, rows: IBalance[]) => {
                     callback(err, rows);
                 });
@@ -24,6 +25,23 @@ export class BalanceService {
                 });
         } catch (error) {
             console.warn('Erro no balanceService: getBalanceById');
+            console.error(error);
+        }
+    }
+
+    getTotalByMonth(month: string, callback: Function){
+        try {
+            db.get(`SELECT 
+                        SUM(VALUE) AS TotalBalance
+                    FROM BALANCE
+                    WHERE 
+                        OCCURRENCE_MONTH LIKE ?`,
+                [month],
+                (err: Error, totalBalance: number) => {
+                    callback(err, totalBalance);
+                });
+        } catch (error) {
+            console.warn('Erro no balanceService: getTotalByMonth');
             console.error(error);
         }
     }

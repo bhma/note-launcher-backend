@@ -36,6 +36,12 @@ const db = new sqlite3.Database('./database.db', (err) => {
             VALUE REAL NOT NULL,
             IS_ACTIVE BOOLEAN NOT NULL DEFAULT(true)
             );`);
+            db.run(`CREATE TABLE IF NOT EXISTS USER (
+                USER_ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                USERNAME TEXT NOT NULL,
+                PASSWORD TEXT NOT NULL,
+                IS_ACTIVE BOOLEAN DEFAULT (true) 
+            );`);
         })
         console.log('Database connected!');
     }

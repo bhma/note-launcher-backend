@@ -38,6 +38,24 @@ export class BalanceController {
         }
     }
 
+    getTotalByMonth(req: Request, res: Response){
+        const month = req.params['month'];
+        try {
+            const balanceService = new BalanceService();
+            balanceService.getTotalByMonth(month,handleGetTotalByMonth);
+        } catch (error) {
+            console.warn('Erro no balance controller: getTotalByMonth');
+            console.error(error);
+        }
+        function handleGetTotalByMonth(err: Error, totalBalance: number) {
+            if (err) {
+                res.json(err);
+            } else {
+                res.json(totalBalance);
+            }
+        }
+    }
+
     async create(req: Request, res: Response) {
         const {
             CREATED_ON,
