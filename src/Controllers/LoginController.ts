@@ -21,10 +21,8 @@ export async function loginController(req: Request, res: Response){
     function handleLogin(err: Error, tokenObj: JwtAuth){
         if(err){
             res.status(401).send({message: err.message});
-            res.end();
         }else{
             res.status(200).send(tokenObj);
-            res.end();
         }
     }
 }

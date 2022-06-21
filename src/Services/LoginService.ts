@@ -2,6 +2,7 @@ import { IUser } from "../Models/user.model";
 import { db } from "../Database";
 import Jwt  from "jsonwebtoken";
 import { JwtAuth } from "../Models/jwtAuth.model";
+import bcrypt from 'bcrypt';
 
 export const secret = 'note-launcher'; 
 
@@ -19,7 +20,7 @@ export async function login(user:IUser, callback: Function) {
                     callback(err, jwtAuth);
                 }else if(!row){
                     callback(new Error('Falha na autenticação'), jwtAuth);
-                } else if(row.PASSWORD !== user.PASSWORD){
+                } else if(!bcrypt.compareSync(user.PASSWORD, row.PASSWORD)){
                     callback(new Error('Senha inválida'), jwtAuth);
                 }else{
                     const token = Jwt.sign({
