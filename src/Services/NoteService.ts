@@ -1,9 +1,17 @@
+import { ISchool } from './../Models/school.model';
 import { db } from "../Database";
 import { INote } from "../Models/note.model";
 import fs from 'fs';
-import excel, { Workbook } from 'exceljs';
+import excel, { Workbook, Worksheet } from 'exceljs';
+import { SchoolService } from "./SchoolService";
 
 class NoteService {
+
+    schoolList: ISchool[] = [];
+    private schServ: SchoolService = new SchoolService();
+
+    
+
     async getNotes(callback: Function) {
         try {
             db.all(`SELECT * FROM NOTE;`,
@@ -32,7 +40,7 @@ class NoteService {
 
     async getNoteByMonth(month: string, callback: Function, schoolId?: number) {
         try {
-            if(schoolId){
+            if (schoolId) {
                 db.all(`SELECT * FROM NOTE
                         WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?`,
                     [month, schoolId],
@@ -44,7 +52,7 @@ class NoteService {
                                 callback(err, notes, sumValues);
                             });
                     });
-            }else{
+            } else {
                 db.all(`SELECT * FROM NOTE
                         WHERE OCCURRENCE_MONTH LIKE ?`,
                     [month],
@@ -120,34 +128,83 @@ class NoteService {
         }
     }
 
-    async createExcel(){
+    async createExcel(noteList: INote[], total: number) {
         const wb = new excel.Workbook();
         wb.creator = 'Bruno Andrade';
         wb.created = new Date;
 
         const ws = wb.addWorksheet('Sheet 1');
+        this.configWs(ws, noteList[0].OCCURRENCE_MONTH);
 
-        ws.columns = [
-            { header: 'Id', key: 'id'},
-            { header: 'Name', key: 'name'},
-            { header: 'Date', key: 'date'}
-        ];
-        
-        
+        noteList.forEach(note => {
+            ws.addRow([note.DESCRIPTION, note.OCCURRENCE_DATE, note.VALUE]);
+        });
+        ws.addRow([]);
+        ws.addRow(['Total de gastos', '', total]);
+
+        // adiciona as notas seprado por escola
+        this.schServ.getSchools((schs: ISchool[]) => {
+            this.schoolList = schs;
+        });
+        const schoolIdList = this.distinctShoolIds(noteList);
+        let count = 2;
+        schoolIdList.forEach(id => {
+            let noteListFiltered = noteList.filter(note => note.SCHOOL_ID === id);
+            ws.mergeCells(`E${count}:G${count}`);
+            ws.getCell('G'+count).value = this.getSchoolName(id);
+            count = count + 2;
+            noteListFiltered.forEach(note => {
+                ws.getCell('E'+count).value = note.DESCRIPTION;
+                ws.getCell('F'+count).value = note.OCCURRENCE_DATE;
+                ws.getCell('G'+count).value = note.VALUE;
+                count = count + 1;
+            });
+            count = count + 2;
+        });
         return this.writeFile(wb);
     }
 
-    async writeFile(wb: Workbook){
+    async writeFile(wb: Workbook) {
         const path = `./`;
         const listFiles = fs.readdirSync(path);
         let fileExcel = listFiles.filter(fileName => {
             return fileName.endsWith('.xlsx');
         })
-        if(fileExcel.length > 0){
+        if (fileExcel.length > 0) {
             fs.rmSync(`${path}${fileExcel.pop()}`);
         }
         await wb.xlsx.writeFile(`ListaNotas.xlsx`);
         return `ListaNotas.xlsx`;
+    }
+
+    configWs(ws: Worksheet, month: string) {
+        ws.mergeCells('A1:G1');
+        ws.getCell('G1').value = `Despesas ${month}`;
+        ws.getCell('G1').alignment = { horizontal: 'center' };
+        ws.getColumn(1).width = 20;
+        ws.getColumn(2).width = 15;
+        ws.getColumn(2).numFmt = 'DD/MM/YYYY';
+        ws.getColumn(3).numFmt = 'R$ 0.00';
+        ws.getColumn(3).width = 18;
+        ws.getColumn(4).width = 3;
+        ws.getColumn(5).width = 20;
+        ws.getColumn(6).width = 15;
+        ws.getColumn(6).numFmt = 'DD/MM/YYYY';
+        ws.getColumn(7).width = 18;
+        ws.getColumn(7).numFmt = 'R$ 0.00';
+
+    }
+
+    distinctShoolIds(noteList: INote[]){
+        let schoolIdList = noteList.map(note => note.SCHOOL_ID);
+        let schoolIdListDis = schoolIdList.filter((id, pos) => {
+            return schoolIdList.indexOf(id) === pos;
+        });
+        return schoolIdListDis;
+    }
+
+    getSchoolName(schId: number){
+        return this.schoolList.find(sch => sch.SCHOOL_ID === schId)?.SCHOOL_NAME;
     }
 }
 

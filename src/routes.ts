@@ -33,7 +33,7 @@ routes.get('/note/:noteId', onAuth, noteController.getNotebyId);
 routes.post('/createNote', onAuth, noteController.createNote);
 routes.post('/createManyNotes', onAuth, noteController.createManyNotes);
 routes.put('/updateNote', onAuth, noteController.updateNote);
-routes.get('/exportExcel', onAuth, noteController.exportExcel);
+routes.post('/exportExcel', onAuth, noteController.exportExcel);
 
 // --> Rota de month
 routes.get('/months', onAuth, monthController.getMonths);

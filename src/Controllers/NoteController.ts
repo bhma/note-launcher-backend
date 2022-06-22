@@ -148,9 +148,13 @@ class NoteController {
     }
 
     async exportExcel(req: Request, res: Response){
+        const {
+            noteList,
+            total
+        } = req.body;
         try {
             const noteService = new NoteService();
-            const filePath = `./${await noteService.createExcel()}`;
+            const filePath = `./${await noteService.createExcel(noteList, total)}`;
             const fileName = path.basename(filePath);
             res.setHeader('Content-Disposition', 'attachment;filename=' + fileName);
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
