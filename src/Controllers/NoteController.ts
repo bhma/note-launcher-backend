@@ -146,6 +146,8 @@ class NoteController {
         }
     }
 
+    sample(){}
+
     async exportExcel(req: Request, res: Response){
         const {
             noteList,
