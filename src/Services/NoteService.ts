@@ -1,3 +1,5 @@
+import { IBalance } from './../Models/balance.model';
+import { BalanceService } from './BalanceService';
 import { ISchool } from './../Models/school.model';
 import { db } from "../Database";
 import { INote } from "../Models/note.model";
@@ -8,7 +10,9 @@ import { SchoolService } from "./SchoolService";
 class NoteService {
 
     schoolList: ISchool[] = [];
+    balanceList: IBalance[] = [];
     private schServ: SchoolService = new SchoolService();
+    private balSer: BalanceService = new BalanceService();
 
     
 
@@ -128,30 +132,48 @@ class NoteService {
         }
     }
 
-    async createExcel(noteList: INote[], total: number) {
+    async createExcel(noteList: INote[], total: number, schs: ISchool[], balances: IBalance[]) {
         const wb = new excel.Workbook();
         wb.creator = 'Bruno Andrade';
         wb.created = new Date;
+        let lineCount: number = 0;
 
         const ws = wb.addWorksheet('Sheet 1');
         this.configWs(ws, noteList[0].OCCURRENCE_MONTH);
+        lineCount = lineCount + 1;
 
         noteList.forEach(note => {
             ws.addRow([note.DESCRIPTION, note.OCCURRENCE_DATE, note.VALUE]);
+            lineCount = lineCount + 1;
         });
         ws.addRow([]);
         ws.addRow(['Total de gastos', '', total]);
+        ws.addRow([]);
+        ws.addRow([]);
+        ws.addRow(['Entradas', '', '']);
+        lineCount = lineCount + 5;
+        ws.mergeCells(`A${lineCount}:C${lineCount}`);
+        ws.getCell(`C${lineCount}`).alignment = { horizontal: 'center' };
+        
+        balances.forEach(balance => {
+            ws.addRow([schs.find(sch => sch.SCHOOL_ID === balance.SCHOOL_ID)?.SCHOOL_NAME, balance.CREATED_ON, balance.VALUE]);
+        });
+
+        const sumBalances = balances.map(bal => bal.VALUE).reduce((prev, curr) => {
+            return prev + curr;
+        });
+        ws.addRow([]);
+        ws.addRow(['Total de Entradas', '', sumBalances]);
 
         // adiciona as notas seprado por escola
-        this.schServ.getSchools((schs: ISchool[]) => {
-            this.schoolList = schs;
-        });
+        
         const schoolIdList = this.distinctShoolIds(noteList);
         let count = 2;
         schoolIdList.forEach(id => {
             let noteListFiltered = noteList.filter(note => note.SCHOOL_ID === id);
             ws.mergeCells(`E${count}:G${count}`);
-            ws.getCell('G'+count).value = this.getSchoolName(id);
+            ws.getCell('G'+count).alignment = { horizontal: 'center' };
+            ws.getCell('G'+count).value = schs.find(sch => sch.SCHOOL_ID === id)?.SCHOOL_NAME;
             count = count + 2;
             noteListFiltered.forEach(note => {
                 ws.getCell('E'+count).value = note.DESCRIPTION;
@@ -205,6 +227,16 @@ class NoteService {
 
     getSchoolName(schId: number){
         return this.schoolList.find(sch => sch.SCHOOL_ID === schId)?.SCHOOL_NAME;
+    }
+
+    loadData(){
+        this.schServ.getSchools((schs: ISchool[]) => {
+            this.schoolList = schs;
+        });
+
+        this.balSer.getAll((balList: IBalance[]) => {
+            this.balanceList = balList;
+        });
     }
 }
 

@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { INote } from '../Models/note.model';
 import { NoteService } from '../Services/NoteService';
-import mime from 'mime';
 import path from 'path';
 
 class NoteController {
@@ -150,11 +149,13 @@ class NoteController {
     async exportExcel(req: Request, res: Response){
         const {
             noteList,
-            total
+            total,
+            schList,
+            balances
         } = req.body;
         try {
             const noteService = new NoteService();
-            const filePath = `./${await noteService.createExcel(noteList, total)}`;
+            const filePath = `./${await noteService.createExcel(noteList, total, schList, balances)}`;
             const fileName = path.basename(filePath);
             res.setHeader('Content-Disposition', 'attachment;filename=' + fileName);
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -164,6 +165,8 @@ class NoteController {
             console.error(error);
         }
     }
+
+    
 }
 
 export { NoteController };

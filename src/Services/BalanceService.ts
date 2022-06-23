@@ -35,7 +35,8 @@ export class BalanceService {
                         SUM(VALUE) AS TotalBalance
                     FROM BALANCE
                     WHERE 
-                        OCCURRENCE_MONTH LIKE ?`,
+                        OCCURRENCE_MONTH LIKE ? AND
+                        IS_ACTIVE = 1`,
                 [month],
                 (err: Error, totalBalance: number) => {
                     callback(err, totalBalance);
