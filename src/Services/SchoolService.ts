@@ -4,7 +4,7 @@ import { db } from "../Database";
 class SchoolService {
     async getSchools(callback: Function) {
         try {
-            db.all('SELECT * FROM SCHOOL;', 
+            db.all('SELECT * FROM SCHOOL WHERE IS_ACTIVE = 1;', 
             (err: Error, rows: ISchool[]) => {
                 callback(err, rows);
             });

@@ -18,7 +18,8 @@ class NoteService {
 
     async getNotes(callback: Function) {
         try {
-            db.all(`SELECT * FROM NOTE;`,
+            db.all(`SELECT * FROM NOTE
+                    WHERE IS_ACTIVE = 1;`,
                 (err: Error, rows: INote[]) => {
                     callback(err, rows);
                 });
@@ -46,7 +47,8 @@ class NoteService {
         try {
             if (schoolId) {
                 db.all(`SELECT * FROM NOTE
-                        WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?`,
+                        WHERE OCCURRENCE_MONTH LIKE ? AND SCHOOL_ID = ?
+                        AND IS_ACTIVE = 1;`,
                     [month, schoolId],
                     (err: Error, notes: INote[]) => {
                         db.get(`SELECT SUM(VALUE) AS SumValues
@@ -58,7 +60,8 @@ class NoteService {
                     });
             } else {
                 db.all(`SELECT * FROM NOTE
-                        WHERE OCCURRENCE_MONTH LIKE ?`,
+                        WHERE OCCURRENCE_MONTH LIKE ?
+                        AND IS_ACTIVE = 1;`,
                     [month],
                     (err: Error, notes: INote[]) => {
                         db.get(`SELECT SUM(VALUE) AS SumValues
